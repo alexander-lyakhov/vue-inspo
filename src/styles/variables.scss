@@ -1,0 +1,43 @@
+﻿@import 'material-colors/dist/colors.scss';
+@import url('https://fonts.googleapis.com/css?family=Exo+2');
+
+$font-primary: 'Exo 2';
+$page-width: 960px;
+
+$bg-body: $md-blue-grey-900;
+$bg-main: $md-blue-grey-800;
+
+$bg-header: $md-blue-grey-800;
+$bg-nav: $md-blue-grey-700;
+$bg-nav-active: #e8e8e8;//$md-purple-a100;
+$bg-nav-selected: $md-blue-grey-900;
+
+$color-primary: #ccc;
+$color-primary__active: #fff;
+$color-secondary: #9ce;
+$text-color: $color_primary;
+$color-route: $md-light-text-secondary;
+$color-accent: $md-green-a200;
+$color-accent-2: #c93; //$md-amber-600;
+
+$min-width: 400px;
+
+@mixin drop-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+@mixin x-center {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin y-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
