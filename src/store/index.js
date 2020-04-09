@@ -1,16 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import facets from './modules/facets'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-
-  },
-  mutations: {
-
-  },
-  actions: {
-
+  modules: {
+    facets
   }
 })

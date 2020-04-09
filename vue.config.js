@@ -1,4 +1,12 @@
 module.exports = {
+  devServer: {
+    proxy: {
+      '/content': {
+          target: 'https://photos.hgtv.com/',
+      },
+    },
+  },
+
   productionSourceMap: false,
 
   configureWebpack: (config) => {
