@@ -9,14 +9,20 @@
   },
 
   mutations: {
-    SELECT_SINGLE_FACET(state, code) {
-      console.log('SELECT_SINGLE_FACET', code)
-      state.selectedFacets.push(code);
+    SELECT_FACET(state, code) {
+      console.log('SELECT_FACET', code)
+
+      if (!state.selectedFacets.includes(code)) {
+        state.selectedFacets.push(code);
+      }
     },
 
-    SELECT_MULTIPLE_FACETS(state, facets) {
-        console.log('SELECT_MULTIPLE_FACETS', facets)
-      facets && state.selectedFacets.push(...facets.split('~'));
+    SET_SELECTED_FACETS(state, facets) {
+      console.log('SET_SELECTED_FACETS', facets)
+
+      if (facets) {
+        state.selectedFacets = facets.split('~');
+      }
     }
   },
 

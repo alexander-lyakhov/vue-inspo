@@ -22,7 +22,7 @@ Vue.use(VueLazyload, {
   */
 })
 
-new Vue({
+window.vm = new Vue({
   router,
   store,
   render: h => h(App)

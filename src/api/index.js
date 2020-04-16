@@ -13,12 +13,12 @@ function getFeed(offset = 0, limit = 36) {
   return axios.get(`/offset:${offset},numOfResults:${limit}.html.json`);
 }
 
-function getDimansions(facets = '', offset = 0, limit = 36) {
+function getDimensions(facets = '', offset = 0, limit = 36) {
   return axios.get(`/dimensions:${facets},offset:${offset},numOfResults:${limit}.html.json`);
 }
 
 export default {
   getFacets,
   getFeed,
-  getDimansions,
+  getDimensions,
 };

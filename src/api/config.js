@@ -3,6 +3,7 @@ import { flags } from '@/defs/flags';
 
 axios.defaults.baseURL = 'https://photos.hgtv.com/content/hgtv-photos/inspiration-feed.json';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.timeout = 1000;
 
 axios.interceptors.request.use(
   config => {

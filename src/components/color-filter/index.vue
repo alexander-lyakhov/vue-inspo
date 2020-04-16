@@ -33,7 +33,8 @@ export default {
 
   methods: {
     onColorClick(facet) {
-      this.$store.commit('facets/SELECT_SINGLE_FACET', facet.code);
+      this.$store.commit('facets/SELECT_FACET', facet.code);
+      this.$emit('facet-select', facet.code);
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <main class="home">
-    <color-filter :colors="colors"/>
+    <color-filter :colors="colors" @facet-select="onFacetSelect"/>
     <feed :images="images" />
   </main>
 </template>
@@ -8,6 +8,7 @@
 <script>
 
 import api from '@/api'
+import backButtonMixin from '@/mixins/back-button';
 import colorFilter from '@/components/color-filter';
 import feed from '@/components/feed';
 import {mapState, mapMutations} from 'vuex';
@@ -20,19 +21,23 @@ export default {
     feed
   },
 
+  mixins: [
+    backButtonMixin
+  ],
+
   data() {
     return {
       facets: [],
       colors: [],
       images: [],
-      dimansions: null
+      dimensions: null,
+      isClean: true,
     }
   },
 
   mounted() {
     console.log('mounted');
-    this.isClean = true;
-    this.init();
+    this.loadData();
   },
 
   computed: {
@@ -40,34 +45,22 @@ export default {
   },
 
   watch: {
-    $route: 'init',
-
-    selectedFacets(codes) {
-      const dimansions = codes.join('~');
-
-      if (this.dimansions !== dimansions) {
-        this.$router.push({name: 'dimansions', params: {dimansions}});
-      }
-    }
+    $route: 'loadData',
   },
 
   methods: {
-    ...mapMutations({
-      saveSelectedFacets: 'facets/SELECT_MULTIPLE_FACETS'
-    }),
+    async loadData() {
+      console.log('loadData', this.$route)
 
-    async init() {
-      console.log('init', this.$route)
+      const dimensions = this.dimensions = this.$route.params.dimensions;
 
-      const dimansions = this.dimansions = this.$route.params.dimansions;
-
-      const data = !dimansions ?
+      const data = !dimensions ?
         await api.getFeed():
-        await api.getDimansions(dimansions);
+        await api.getDimensions(dimensions);
 
       if (this.isClean) {
         this.facets = await api.getFacets();
-        this.saveSelectedFacets(dimansions);
+        this.$store.commit('facets/SET_SELECTED_FACETS', dimensions);
       }
 
       this.extractData(data);
@@ -100,6 +93,14 @@ export default {
         }
       })
     },
+
+    onFacetSelect(code) {
+      this.$router.push({
+        name: 'dimensions',
+        params: {
+          dimensions: this.selectedFacets.join('~')
+        }});
+    }
   }
 }
 </script>
@@ -108,7 +109,7 @@ export default {
 
 main {
   background: $bg-main;
-  width: $page-width;
+  max-width: $page-width;
   margin: auto;
   padding: .75rem;
 }
