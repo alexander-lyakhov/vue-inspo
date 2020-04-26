@@ -1,23 +1,38 @@
 <template>
-  <main class="home">
-    <color-filter :colors="colors" @facet-select="onFacetSelect"/>
-    <feed :images="images" />
-  </main>
+  <div class="page">
+    <header>
+      <div class="filter-panel">
+        <facet-bar />
+        <search-filter />
+      </div>
+    </header>
+    <main class="home">
+      <!--
+      <color-filter :colors="colors" @facet-select="onFacetSelect"/>
+      -->
+      <feed :images="images" />
+    </main>
+    <div class="overlay"></div>
+  </div>
 </template>
 
 <script>
 
 import api from '@/api'
 import backButtonMixin from '@/mixins/back-button';
-import colorFilter from '@/components/color-filter';
+import facetBar from '@/components/filter-panel/facet-bar';
+import searchFilter from '@/components/filter-panel/search-filter'
+//import colorFilter from '@/components/color-filter';
 import feed from '@/components/feed';
-import {mapState, mapMutations} from 'vuex';
+import {mapState, mapMutations, mapActions} from 'vuex';
 
 export default {
   name: 'home',
 
   components: {
-    colorFilter,
+    facetBar,
+    searchFilter,
+    //colorFilter,
     feed
   },
 
@@ -25,15 +40,9 @@ export default {
     backButtonMixin
   ],
 
-  data() {
-    return {
-      facets: [],
-      colors: [],
-      images: [],
-      dimensions: null,
-      isClean: true,
-    }
-  },
+  data: () => ({
+    isClean: true,
+  }),
 
   mounted() {
     console.log('mounted');
@@ -41,7 +50,8 @@ export default {
   },
 
   computed: {
-    ...mapState('facets', ['selectedFacets'])
+    ...mapState('images', ['images']),
+    ...mapState('facets', ['selectedFacets', 'colors'])
   },
 
   watch: {
@@ -49,19 +59,27 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      extractImages: 'images/EXTRACT_IMAGES',
+      extractStyles: 'facets/EXTRACT_STYLES',
+      extractColors: 'facets/EXTRACT_COLORS',
+    }),
+
     async loadData() {
       console.log('loadData', this.$route)
 
-      const dimensions = this.dimensions = this.$route.params.dimensions;
+      const dimensions = this.$route.params.dimensions;
+
+      if (this.isClean) {
+        const facets = await api.getFacets();
+
+        this.$store.commit('facets/SET_ALL_FACETS', facets);
+        this.$store.commit('facets/SET_SELECTED_FACETS', dimensions);
+      }
 
       const data = !dimensions ?
         await api.getFeed():
         await api.getDimensions(dimensions);
-
-      if (this.isClean) {
-        this.facets = await api.getFacets();
-        this.$store.commit('facets/SET_SELECTED_FACETS', dimensions);
-      }
 
       this.extractData(data);
       this.isClean = false;
@@ -69,29 +87,8 @@ export default {
 
     extractData(data) {
       this.extractImages(data);
+      this.extractStyles(data);
       this.extractColors(data);
-    },
-
-    extractImages(data) {
-      const records = data.ServiceResponse.results.records;
-
-      this.images = records.map(item =>
-        item.CORE_PROMO_IMAGE_URL ?
-          item.CORE_PROMO_IMAGE_URL[0] + '.rend.hgtvcom.651.651.jpeg':
-          item.CORE_CRX_PATH[0] + '.rend.hgtvcom.651.651.jpeg'
-      )
-    },
-
-    extractColors(data) {
-      const colors = data.ServiceResponse.results.facets[2].COLOR_SFACET;
-
-      this.colors = colors.map(item => {
-        return {
-          ...item,
-          name: item.Value.replace(/.*:(\D*$)/i, '$1'),
-          code: this.facets.find(el => el.value === item.Value).index
-        }
-      })
     },
 
     onFacetSelect(code) {
@@ -107,10 +104,41 @@ export default {
 
 <style lang="scss" scoped>
 
+.page {
+  background: #066;
+
+  header {
+    background: #c0c0c0;
+    width: 100%;
+    position: relative;
+    padding: 8px 0;
+    z-index: 1;
+
+    .filter-panel {
+      background: #c0c0c0;
+      width: $page-width;
+      height: 48px;
+      margin: auto;
+      position: relative;
+    }
+  }
+}
+
 main {
   background: $bg-main;
   max-width: $page-width;
   margin: auto;
   padding: .75rem;
+}
+
+.overlay {
+  background: #000;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+  //display: none;
 }
 </style>

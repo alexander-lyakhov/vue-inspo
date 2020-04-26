@@ -43,7 +43,8 @@ export default {
 <style lang="scss" scoped>
 
 .facets-filter {
-  display: flex;
+  //display: flex;
+  display: none;
   flex-wrap: wrap;
   padding: .5rem 0 .75rem;
   //position: fixed;

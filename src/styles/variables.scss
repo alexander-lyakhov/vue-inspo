@@ -20,6 +20,23 @@ $color-route: $md-light-text-secondary;
 $color-accent: $md-green-a200;
 $color-accent-2: #c93; //$md-amber-600;
 
+/*
+ *
+ */
+
+$color-accent--default: #b5e6f0;
+$color-accent--default-darken: darken(#b5e6f0, 10%);
+
+$color-accent--style: #FAD7F9;
+$color-accent--style-darken: darken(#FAD7F9, 10%);
+
+$color-accent--color: #d6e3a7;
+$color-accent--color-darken: darken(#d6e3a7, 10%);
+
+$bg--default: darken(desaturate($color-accent--default, 40%), 40%);
+$bg--style: darken(desaturate($color-accent--style, 65%), 65%);
+$bg--color: darken(desaturate($color-accent--color, 35%), 30%);
+
 $min-width: 400px;
 
 @mixin drop-shadow {

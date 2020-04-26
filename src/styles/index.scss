@@ -1,11 +1,11 @@
 @import "./buttons.scss";
 
 html, body {
+  font: 16px $font-primary, verdana;
   min-height: 100vh;
 }
 
 body {
-  font: 16px $font-primary, verdana;
   color: $text-color;
   background: $bg-body;
   height: 100%;
