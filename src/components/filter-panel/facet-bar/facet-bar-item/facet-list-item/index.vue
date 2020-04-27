@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="facet-list__item" :class="[`facet-list__item-${type}`]" @click.stop.prevent>
+  <div class="facet-list__item" :class="[`facet-list__item-${type}`]" @click.stop.prevent="onClick">
     <a href="#" class="facet-button">
       <div class="facet-button__content">
         <div v-if="type === 'color'" class="color-sample" :style="`background: ${item.name}`"></div>
@@ -21,6 +21,12 @@ export default {
     type: {
       type: String,
       default: 'default'
+    }
+  },
+
+  methods: {
+    onClick(e) {
+      this.$emit('click', this.item);
     }
   }
 }

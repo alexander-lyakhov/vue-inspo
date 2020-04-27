@@ -56,6 +56,7 @@ export default {
 
   watch: {
     $route: 'loadData',
+    selectedFacets: 'updateFeed'
   },
 
   methods: {
@@ -91,7 +92,7 @@ export default {
       this.extractColors(data);
     },
 
-    onFacetSelect(code) {
+    updateFeed(code) {
       this.$router.push({
         name: 'dimensions',
         params: {
@@ -139,6 +140,6 @@ main {
   left: 0;
   top: 0;
   opacity: 0.5;
-  //display: none;
+  display: none;
 }
 </style>

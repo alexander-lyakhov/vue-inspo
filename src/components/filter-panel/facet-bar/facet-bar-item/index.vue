@@ -3,13 +3,14 @@
     <a href="#" class="facets-filter__button" :class="[{'active': isActive}, type]">
       <span><slot></slot></span>
 
-      <div class="facet-list" v-show="isActive" @click="onFacetSelect">
+      <div class="facet-list" v-show="isActive">
         <div class="facet-list__container">
           <facet-list-item
             v-for="item in items"
             :key="item.code"
             :item="item"
             :type="type"
+            @click="onFacetSelect"
           />
         </div>
       </div>
@@ -54,8 +55,8 @@ export default {
       this.isActive = !this.isActive;
     },
 
-    onFacetSelect(e) {
-      console.log('onFacetSelect', e.target);
+    onFacetSelect(facet) {
+      this.$store.commit('facets/SELECT_FACET', facet.code);
     }
   }
 }
