@@ -3,7 +3,7 @@
     <header>
       <div class="filter-panel">
         <facet-bar />
-        <search-filter />
+        <search-bar />
       </div>
     </header>
     <main class="home">
@@ -21,7 +21,7 @@
 import api from '@/api'
 import backButtonMixin from '@/mixins/back-button';
 import facetBar from '@/components/filter-panel/facet-bar';
-import searchFilter from '@/components/filter-panel/search-filter'
+import searchBar from '@/components/filter-panel/search-bar'
 //import colorFilter from '@/components/color-filter';
 import feed from '@/components/feed';
 import {mapState, mapMutations, mapActions} from 'vuex';
@@ -31,7 +31,7 @@ export default {
 
   components: {
     facetBar,
-    searchFilter,
+    searchBar,
     //colorFilter,
     feed
   },

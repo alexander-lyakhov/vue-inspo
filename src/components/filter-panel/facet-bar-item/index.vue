@@ -20,7 +20,7 @@
 
 <script>
 
-import facetListItem from './facet-list-item';
+import facetListItem from '@/components/filter-panel/facet-list-item';
 
 export default {
   name: 'facet-bar-item',

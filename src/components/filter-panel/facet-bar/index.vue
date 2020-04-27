@@ -20,7 +20,7 @@
 
 <script>
 
-import filterButton from './facet-bar-item';
+import filterButton from '@/components/filter-panel/facet-bar-item';
 import {mapState} from 'vuex';
 
 export default {
