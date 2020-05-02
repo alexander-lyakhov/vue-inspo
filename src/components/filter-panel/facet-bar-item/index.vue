@@ -111,7 +111,7 @@ export default {
     left: 0;
     top: 100%;
     z-index: 1;
-    margin-top: 8px;
+    //margin-top: 8px;
     //padding: 4px 0 0 0;
     padding: 2px 4px 4px;
 

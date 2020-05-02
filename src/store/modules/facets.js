@@ -1,4 +1,14 @@
-﻿export default {
+﻿const facetNameRegexp = /.*:(.*\/)?(\D*$)/i;
+const facetTypeRegexp = /(^\D*):.*/i;
+
+const TYPE = {
+  'CUSTOM_FACET': 'custom',
+  'ROOMS_AND_SPACES_SFACET': 'rooms',
+  'STYLE_SFACET': 'style',
+  'COLOR_SFACET': 'color'
+}
+
+export default {
   namespaced: true,
 
   state: {
@@ -9,6 +19,9 @@
   },
 
   getters: {
+    selectedFacetItems(state) {
+      return state.facets.filter(item => state.selectedFacets.includes(item.code));
+    }
   },
 
   mutations: {
@@ -21,7 +34,14 @@
     },
 
     SET_ALL_FACETS(state, facets) {
-      state.facets = facets;
+      state.facets = facets.map(item => {
+        return {
+          ...item,
+          type: TYPE[item.value.replace(facetTypeRegexp, '$1')],
+          name: item.value.replace(facetNameRegexp, '$2'),
+          code: item.index
+        }
+      })
     },
 
     SET_SELECTED_FACETS(state, facets) {
@@ -40,7 +60,7 @@
       state.styles = styles.map(item => {
         return {
           ...item,
-          name: item.Value.replace(/.*:(\D*$)/i, '$1'),
+          name: item.Value.replace(facetNameRegexp, '$2'),
           code: state.facets.find(el => el.value === item.Value).index
         }
       })
@@ -54,7 +74,7 @@
       state.colors = colors.map(item => {
         return {
           ...item,
-          name: item.Value.replace(/.*:(\D*$)/i, '$1'),
+          name: item.Value.replace(facetNameRegexp, '$2'),
           code: state.facets.find(el => el.value === item.Value).index
         }
       })

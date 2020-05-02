@@ -2,8 +2,15 @@
   <div class="page">
     <header>
       <div class="filter-panel">
-        <facet-bar />
-        <search-bar />
+        <div class="filter-panel__container">
+          <facet-bar />
+          <search-bar />
+        </div>
+      </div>
+      <div class="selected-facets">
+        <div class="selected-facets__container">
+          <facet-chip v-for="item in selectedFacetItems" :key="item.code" :item="item" />
+        </div>
       </div>
     </header>
     <main class="home">
@@ -21,10 +28,11 @@
 import api from '@/api'
 import backButtonMixin from '@/mixins/back-button';
 import facetBar from '@/components/filter-panel/facet-bar';
-import searchBar from '@/components/filter-panel/search-bar'
+import searchBar from '@/components/filter-panel/search-bar';
+import facetChip from '@/components/facet-chip';
 //import colorFilter from '@/components/color-filter';
 import feed from '@/components/feed';
-import {mapState, mapMutations, mapActions} from 'vuex';
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 
 export default {
   name: 'home',
@@ -32,6 +40,7 @@ export default {
   components: {
     facetBar,
     searchBar,
+    facetChip,
     //colorFilter,
     feed
   },
@@ -51,7 +60,8 @@ export default {
 
   computed: {
     ...mapState('images', ['images']),
-    ...mapState('facets', ['selectedFacets', 'colors'])
+    ...mapState('facets', ['selectedFacets', 'colors']),
+    ...mapGetters('facets', ['selectedFacetItems']),
   },
 
   watch: {
@@ -69,7 +79,7 @@ export default {
     async loadData() {
       console.log('loadData', this.$route)
 
-      const dimensions = this.$route.params.dimensions;
+      const dimensions = this.dimensions = this.$route.params.dimensions;
 
       if (this.isClean) {
         const facets = await api.getFacets();
@@ -92,11 +102,14 @@ export default {
       this.extractColors(data);
     },
 
-    updateFeed(code) {
-      this.$router.push({
+    updateFeed(facets) {
+
+      const dimensions = facets.join('~');
+
+      dimensions !== this.dimensions && this.$router.push({
         name: 'dimensions',
         params: {
-          dimensions: this.selectedFacets.join('~')
+          dimensions
         }});
     }
   }
@@ -112,15 +125,29 @@ export default {
     background: #c0c0c0;
     width: 100%;
     position: relative;
-    padding: 8px 0;
     z-index: 1;
 
     .filter-panel {
-      background: #c0c0c0;
-      width: $page-width;
-      height: 48px;
-      margin: auto;
-      position: relative;
+      padding: 8px 0;
+      //padding-top: 8px;
+
+      &__container {
+        background: #c0c0c0;
+        max-width: $page-width;
+        height: 48px;
+        margin: auto;
+        position: relative;
+      }
+    }
+
+    .selected-facets {
+      background: #606060;
+
+      &__container {
+        max-width: $page-width;
+        margin: auto;
+        padding: 4px 0;
+      }
     }
   }
 }
